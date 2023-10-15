@@ -22,6 +22,7 @@
     </style>
 </head>
 <?php
+include "apps/config.php";
 if(isset($_POST["btnsubmit"]))
 {
     $emailadmin= $_POST["emailadmin"];
@@ -32,23 +33,17 @@ if(isset($_POST["btnsubmit"]))
     //$emailadmin = addslashes($emailadmin);
     //$passwordadmin = strip_tags($passwordadmin);
     //$passwordadmin = addslashes($passwordadmin);
-    if ($emailadmin == "" || $passwordadmin =="")
-    {
-        echo '<div class="login-box" style="">
-				Các trường không được để trống!
-				</div>
-				<div id="mask" style="display:block;opacity: 0.7 !important;background: #000 !important;"></div>';
-    }
-    else
-    {
+
+
         $query = mysqli_query($conn,"select * from admin where email = '$emailadmin' and password = '$passwordadmin' ");
         $items_query = mysqli_fetch_array($query);
         $num_rows = mysqli_num_rows($query);
+        
         if ($num_rows==0) {
-            echo '<div class="login-box" style="">
+            echo "Lỗi SQL: " . mysqli_error($conn);
+            $errors =  '<div id="errformlg">
 						Tên đăng nhập hoặc mật khẩu không đúng !
-					</div>
-				<div id="mask" style="display:block;opacity: 0.7 !important;background: #000 !important;"></div>';
+					</div>';
         }
         else
         {
@@ -57,9 +52,8 @@ if(isset($_POST["btnsubmit"]))
             $_SESSION['emailadmin'] = $emailadmin;
             // Thực thi hành động sau khi lưu thông tin vào session
             // ở đây mình tiến hành chuyển hướng trang web tới một trang gọi là index.php
-            header('Location: http://localhost:8080/webbanhang/admin');
+            header('Location: index.php');
         }
-    }
 }
 ?>
     <div id="loginForm">
@@ -74,11 +68,11 @@ if(isset($_POST["btnsubmit"]))
         <div class="form-group">
             <div class="input-group">
               <span class="input-group-addon"><i class="fa fa-key"></i></span>
-              <input name="passwordadmin" type="password" class="form-control" id="password" placeholder="Mật khẩu" required="">
+              <input name="passwordadmin" type="password" class="form-control" id="password" placeholder="Mật khẩu" >
             </div>
         </div>
          <div class="form-group">
-        <button class="btn btn-primary" type="submit"><i class="fa fa-sign-in"></i>Đăng nhập</button>
+        <button class="submit button" type="submit" name="btnsubmit">Đăng nhập</button>
         <button class="btn btn-danger" style="margin-left: 25px;">Quên mật khẩu?</button>
     </div>
 </form>
