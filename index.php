@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
 <html lang="vi">
+<meta http-equiv="Content-Security-Policy" content="script-src 'self';">
 
 <body>
 <?php
@@ -30,7 +31,8 @@ include_once ("apps/libs/header.php");?>
                     <?php
                     $balo_res = mysqli_query($conn,"SELECT * FROM sub_menu WHERE id_catalog=25") or die('Cannot select table!');
                     $balo_items = mysqli_fetch_array($balo_res);
-                    echo"<a href='sanpham.php?id_menu=".$balo_items['id_catalog']."'>Xem tất cả</a>";
+                    //echo"<a href='sanpham.php?id_menu=".$balo_items['id_catalog']."'>Xem tất cả</a>";
+                    echo "<a href='sanpham.php?id_menu=" . htmlspecialchars($balo_items['id_catalog'], ENT_QUOTES, 'UTF-8') . "'>Xem tất cả</a>";
                     ?>
                 </div><!--end sub-->
                 <?php
@@ -66,7 +68,7 @@ include_once ("apps/libs/header.php");?>
                                 <div class="row_product_h">
                                     <?php
                                     echo"
-					<a href='chitiet.php?id=".$tuixach_items['id_sanpham']."' class='images'>
+					<a href='chitiet.php?id=".htmlspecialchars($tuixach_items['id_sanpham'], ENT_QUOTES, 'UTF-8') ."' class='images'>
 						<img alt='".$tuixach_items['tensp']."' src='images/".$tuixach_items['image_sp']."'>
 					</a>
 					<h2>
@@ -132,7 +134,7 @@ include_once ("apps/libs/header.php");?>
                             <div class="row_product_h">
                                 <?php
                                 echo"
-					<a href='chitiet.php?id=".$balo_items['id_sanpham']."' class='images'>
+					<a href='product/".$balo_items['id_sanpham']."' class='images'>
 						<img alt='".$balo_items['tensp']."' src='images/".$balo_items['image_sp']."'>
 					</a>
 					<h2>

@@ -1,6 +1,8 @@
 <!DOCTYPE HTML>
 <html lang="vi">
+
 <?php
+header("Content-Security-Policy: default-src 'self'; script-src 'self'  connect.facebook.net; style-src 'self' 'unsafe-inline' connect.facebook.net; img-src 'self' data: https://*.facebook.com; frame-src 'self' https://*.facebook.com;");
 ini_set('display_errors', 1);
 ini_set('log_errors', 'on');
 ini_set('error_log', 'php.error.log');
@@ -30,14 +32,17 @@ include("apps/libs/header.php");
         <span class="home">
             	<?php
                 $id = $_GET['id'];
-                $sanpham_query ="SELECT * FROM sanpham where id_sanpham=".$id;
-                $sanpham_res = mysqli_query($conn,$sanpham_query) or die("Cannot select table!");
+                //$sanpham_query ="SELECT * FROM sanpham where id_sanpham=".$id;
+                $sanpham_query =$conn->prepare("SELECT * FROM sanpham where id_sanpham= ?");
+                $sanpham_query->bind_param("i", $id); // Bind giá trị vào statement
+                $sanpham_query->execute();
+                //
+                //$sanpham_res = mysqli_query($conn,$sanpham_query) or die("Cannot select table!");         		
+   		$sanpham_res = $sanpham_query->get_result();
+   		//
                 while ($sanpham_items = mysqli_fetch_array($sanpham_res))
                 {
-                echo'
-								'.$sanpham_items["parent_name_menu"].'
-							';
-
+                echo''.$sanpham_items["parent_name_menu"].'';
                 echo '›';
                 ?>
             </span><!--home-->
@@ -65,8 +70,14 @@ include("apps/libs/header.php");
                         <div class="owl-item" style="width: 356px;">
                             <?php
                             $id = $_GET['id'];
-                            $sanpham_query ="SELECT * FROM sanpham where id_sanpham=$id";
-                            $sanpham_res = mysqli_query($conn,$sanpham_query) or die("Cannot select table!");
+                            //$sanpham_query ="SELECT * FROM sanpham where id_sanpham=$id";
+                            $sanpham_query =$conn->prepare("SELECT * FROM sanpham where id_sanpham= ?");
+                            $sanpham_query->bind_param("i", $id); // Bind giá trị vào statement
+                    	    $sanpham_query->execute();   
+                    	    //        
+                            //$sanpham_res = mysqli_query($conn,$sanpham_query) or die("Cannot select table!");
+                            $sanpham_res = $sanpham_query->get_result();
+                            //
                             while ($sanpham_items = mysqli_fetch_array($sanpham_res))
                             {
                             echo'<img src="images/'.$sanpham_items["image_sp"].'">';
@@ -119,9 +130,7 @@ include("apps/libs/header.php");
                         </div><!--end ratings-->
                     </div><!--end pro_dg_tt-->
                 </div><!--end pro_dg_tt-->
-                <a target="_blank" href="http://www.facebook.com/sharer.php?u=http://localhost:8080/webbanhang/chitiet.php?id=<?php echo $id; ?>" class="fb shareFa"></a>
-                <a target="_blank" href="http://twitter.com/share?url=http://localhost:8080/webbanhang/chitiet.php?id=<?php echo $id; ?>" class="tw shareFa"></a>
-                <a target="_blank" href="https://plus.google.com/share?url=http://sanphammtlpro.16mb.com/san-pham/page-chitiet.php?id=<?php echo $id; ?>" class="gg shareFa"></a>
+
             </div><!--end pro_dg-->
             <div class="proDha">
                 <div class="btDah">
@@ -129,7 +138,7 @@ include("apps/libs/header.php");
                     <span class="btBt">Xem hàng tại nhà không mua không sao</span>
                 </div><!--end btDah-->
 
-                <div class="yctv"><a href="https://fb.com/linkerpt" target="_blank"> YÊU CẦU TƯ VẤN</a> </div><!--end yctv-->
+                <div class="yctv"><a href="https://fb.com/" target="_blank"> YÊU CẦU TƯ VẤN</a> </div><!--end yctv-->
             </div><!--end proDha-->
             <div class="goituvan">
                 <i class="icon"></i>GỌI TƯ VẤN
@@ -174,8 +183,14 @@ include("apps/libs/header.php");
         <article>
             <?php
             $id = $_GET['id'];
-            $sanpham_query ="SELECT * FROM sanpham where id_sanpham=".$id;
-            $sanpham_res = mysqli_query($conn,$sanpham_query) or die("Cannot select table!");
+            //$sanpham_query ="SELECT * FROM sanpham where id_sanpham=".$id;
+            $sanpham_query =$conn->prepare("SELECT * FROM sanpham where id_sanpham= ?");
+            $sanpham_query->bind_param("i", $id); // Bind giá trị vào statement
+            $sanpham_query->execute();
+            //        	    
+            //$sanpham_res = mysqli_query($conn,$sanpham_query) or die("Cannot select table!");
+            $sanpham_res = $sanpham_query->get_result();
+            //
             while ($sanpham_items = mysqli_fetch_array($sanpham_res))
             {
                 echo '<h2 style="text-align: center;" class="uppercaseh2"><strong><span style="font-size:20px">'.$sanpham_items['tensp'].'</span></strong></h2>';
@@ -186,7 +201,7 @@ include("apps/libs/header.php");
         <!--Bình luận -->
         <div class="rightDetailHA">
             <b class="cmt">BÌNH LUẬN</b>
-            <div class="fb-comments" data-href="page-chitiet.php?id=<?php echo $id; ?>" data-width="100%" data-numposts="6">
+            <div class="fb-comments" data-href="page-chitiet.php?id=<?php echo htmlspecialchars($id); ?>" data-width="100%" data-numposts="6">
             </div>
         </div>
     </aside><!--end product-->

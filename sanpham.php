@@ -60,7 +60,7 @@ require ("apps/libs/header.php");
         {
             echo"<div class='product_item'>";
             echo"
-							<a href='chitiet.php?id=".$row['id_sanpham']."' class='images'>
+							<a href='product/".$row['id_sanpham']."' class='images'>
 							<img alt='".$row['tensp']."' src='images/".$row['image_sp']."'>
 							</a>
 							<h2 style='margin-top:0;margin-bottom:0;'>
